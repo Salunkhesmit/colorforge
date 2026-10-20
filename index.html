@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ColorForge — Gradient Generator</title>
+
+    <link href="assets/plugins/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/plugins/fontawesome-free-7.2.0-web/fontawesome-free-7.2.0-web/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/style.css"/>
+
+    <link rel="icon" type="image/jpeg" href="assets/images/gradient-generator-logo.jpeg">
+
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+</head>
+<body>
+
+    <!-- Intro Section (kept, currently disabled) -->
+    <div id="intro" class="position-fixed top-0 start-0 w-100 vh-100 d-flex flex-column justify-content-center align-items-center bg-black text-white">
+        <img src="assets/images/gradient-generator-logo.jpeg" class="img-fluid intro-logo" alt="ColorForge Logo">
+        <h1 class="fw-bold mt-3">Designed & Developed by Smit Salunkhe</h1>
+    </div>
+
+    <section id="content" class="ui-dark">
+
+        <div class="workspace">
+
+            <!-- LEFT: Control panel -->
+            <aside class="panel controls-panel">
+
+                <div class="panel-header">
+                    <img src="assets/images/gradient-generator-logo.jpeg" class="brand-logo" alt="ColorForge Logo">
+                    <div class="brand-text">
+                        <span class="brand-name">ColorForge</span>
+                        <span class="brand-sub">Gradient Generator</span>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <span class="section-label">Gradient Direction</span>
+                    <div class="direction-pad">
+                        <button class="direction-btn" data-direction="to top left" aria-label="to top left"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn" data-direction="to top" aria-label="to top"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn" data-direction="to top right" aria-label="to top right"><i class="fa-solid fa-arrow-right"></i></button>
+
+                        <button class="direction-btn" data-direction="to left" aria-label="to left"><i class="fa-solid fa-arrow-right"></i></button>
+                        <span class="direction-center" aria-hidden="true"></span>
+                        <button class="direction-btn active" data-direction="to right" aria-label="to right"><i class="fa-solid fa-arrow-right"></i></button>
+
+                        <button class="direction-btn" data-direction="to bottom left" aria-label="to bottom left"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn" data-direction="to bottom" aria-label="to bottom"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn" data-direction="to bottom right" aria-label="to bottom right"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="section section-grow">
+                    <span class="section-label">
+                        Generated CSS
+                        <i class="fa-solid fa-arrow-right-long copy-hint" title="Click code to copy"></i>
+                    </span>
+                    <div class="copyCode" id="copyCodeText" onclick="myFunction()">
+                        <p>background-image: linear-gradient(to right, #f5af19, #f12711);</p>
+                    </div>
+                </div>
+
+            </aside>
+
+            <!-- RIGHT: Colors panel -->
+            <section class="panel colors-panel">
+
+                <div class="section">
+                    <span class="section-label">Colors</span>
+                    <div class="btns">
+                        <button id="myButton">#f5af19</button>
+                        <button id="myButton2">#f12711</button>
+                    </div>
+                </div>
+
+                <div class="section section-grow">
+                    <span class="section-label">Pickers</span>
+                    <div class="pickers">
+                        <div id="picker1"></div>
+                        <div id="picker2"></div>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+
+        <footer class="site-footer">Designed &amp; Developed by Smit Salunkhe</footer>
+
+    </section>
+
+    <!-- Copy Notification -->
+    <div id="toast" class="toast-msg" role="status" aria-live="polite">
+        <i class="fa-solid fa-check"></i>
+        <span>Code copied to clipboard</span>
+    </div>
+
+    <script src="assets/js/jquery-3.7.1.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/plugins/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
