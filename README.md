@@ -1,12 +1,12 @@
 # ColorForge — Gradient Generator 🎨
 
-**ColorForge** is a modern, interactive gradient design studio for creating, customizing, and exploring beautiful CSS gradients.
-
-It combines advanced gradient controls, a visually immersive interface, and creative tools to make gradient design more intuitive and enjoyable.
+**ColorForge** is an interactive gradient design studio created as a hands-on practice project while learning JavaScript.
 
 ## ✨ About the Project
 
-ColorForge allows users to experiment with different gradient styles, customize colors and color stops, adjust gradient directions, and explore creative color combinations.
+ColorForge started as a way to practice JavaScript, experiment with web development, and explore the integration of 3D visuals into a web application.
+
+The project is primarily for learning and practice, exploring frontend development concepts, and testing creative UI interactions and 3D integration.
 
 ### Key Features
 
@@ -39,4 +39,4 @@ Creator and developer of ColorForge.
 
 ---
 
-*Designed and developed with creativity, experimentation, and a passion for web development.*
+*Built for practice, driven by curiosity, and improved with every new idea.*
