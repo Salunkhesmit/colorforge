@@ -3,61 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ColorForge — Create stunning gradients with interactive color pickers and customizable gradient directions.">
-    <title>ColorForge — Gradient Generator</title>
+    <title>ColorForge — 3D Gradient Studio</title>
 
-    <!-- Bootstrap 5.3.8 CDN -->
+    <<!-- Bootstrap 5.3.8 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Font Awesome 7.2.0 CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.2.0/css/all.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Favicon -->
+        
+    <link rel="stylesheet" href="style.css"/>
     <link rel="icon" type="image/jpeg" href="gradient-generator-logo.jpeg">
 
-    <!-- iro.js Color Picker -->
-    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+    <!-- three.js import map — MUST come before any module script -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+        }
+    }
+    </script>
 </head>
 <body>
 
-    <!-- Intro Section (kept, currently disabled) -->
-    <div id="intro" class="position-fixed top-0 start-0 w-100 vh-100 d-flex flex-column justify-content-center align-items-center bg-black text-white">
-        <img src="gradient-generator-logo.jpeg" class="img-fluid intro-logo" alt="ColorForge Logo">
-        <h1 class="fw-bold mt-3">Designed & Developed by Smit Salunkhe</h1>
+    <!-- ================= LANDING ================= -->
+    <div id="landing">
+        <canvas id="landingCanvas"></canvas>
+        <div class="landing-content">
+            <h1 class="landing-title">ColorForge</h1>
+            <p class="landing-sub">Immersive 3D Gradient Studio</p>
+            <button id="enterBtn">
+                <span>Enter ColorForge</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
     </div>
 
+    <!-- ================= STUDIO ================= -->
     <section id="content" class="ui-dark">
+
+        <div class="studio-bar">
+            <div class="studio-brand">
+                <img src="assets/images/gradient-generator-logo.jpeg" alt="ColorForge">
+                <strong>ColorForge</strong><span>Studio</span>
+            </div>
+            <div class="studio-actions">
+                <button class="tool tool-reset" id="resetBtn" title="Reset studio to defaults">
+                    <i class="fa-solid fa-arrows-rotate"></i> <span>Reset</span>
+                </button>
+                <button class="tool" id="toggle3D" aria-pressed="false">
+                    <i class="fa-solid fa-cube"></i> <span>3D Preview</span>
+                </button>
+                <button class="tool" id="openExport">
+                    <i class="fa-solid fa-image"></i> Export Background
+                </button>
+            </div>
+        </div>
 
         <div class="workspace">
 
-            <!-- LEFT: Control panel -->
+            <!-- LEFT: controls -->
             <aside class="panel controls-panel">
 
-                <div class="panel-header">
-                    <img src="gradient-generator-logo.jpeg" class="brand-logo" alt="ColorForge Logo">
-                    <div class="brand-text">
-                        <span class="brand-name">ColorForge</span>
-                        <span class="brand-sub">Gradient Generator</span>
+                <div class="section">
+                    <span class="section-label">Gradient Type</span>
+                    <div class="type-group" id="typeGroup">
+                        <button class="tool" data-type="linear">Linear</button>
+                        <button class="tool" data-type="radial">Radial</button>
+                        <button class="tool" data-type="conic">Conic</button>
                     </div>
                 </div>
 
-                <div class="section">
+                <div class="section" id="angleSection">
+                    <span class="section-label">Angle</span>
+                    <div class="angle-row">
+                        <input type="range" class="form-range" id="angle" min="0" max="360" value="90">
+                        <output id="angleVal">90°</output>
+                    </div>
+                </div>
+
+                <div class="section" id="directionSection">
                     <span class="section-label">Gradient Direction</span>
                     <div class="direction-pad">
-                        <button class="direction-btn" data-direction="to top left" aria-label="to top left"><i class="fa-solid fa-arrow-right"></i></button>
-                        <button class="direction-btn" data-direction="to top" aria-label="to top"><i class="fa-solid fa-arrow-right"></i></button>
-                        <button class="direction-btn" data-direction="to top right" aria-label="to top right"><i class="fa-solid fa-arrow-right"></i></button>
-
-                        <button class="direction-btn" data-direction="to left" aria-label="to left"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn" data-direction="to top left"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn" data-direction="to top"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn" data-direction="to top right"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn" data-direction="to left"><i class="fa-solid fa-arrow-right"></i></button>
                         <span class="direction-center" aria-hidden="true"></span>
-                        <button class="direction-btn active" data-direction="to right" aria-label="to right"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn active" data-direction="to right"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn" data-direction="to bottom left"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn" data-direction="to bottom"><i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="direction-btn" data-direction="to bottom right"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
 
-                        <button class="direction-btn" data-direction="to bottom left" aria-label="to bottom left"><i class="fa-solid fa-arrow-right"></i></button>
-                        <button class="direction-btn" data-direction="to bottom" aria-label="to bottom"><i class="fa-solid fa-arrow-right"></i></button>
-                        <button class="direction-btn" data-direction="to bottom right" aria-label="to bottom right"><i class="fa-solid fa-arrow-right"></i></button>
+                <div class="section is-hidden" id="radialSection">
+                    <span class="section-label">Radial Shape</span>
+                    <div class="type-group" id="shapeGroup">
+                        <button class="tool" data-shape="circle">Circle</button>
+                        <button class="tool" data-shape="ellipse">Ellipse</button>
+                    </div>
+                </div>
+
+                <div class="section is-hidden" id="centerSection">
+                    <span class="section-label">Center Position</span>
+                    <div class="angle-row">
+                        <span class="pos-label">X</span>
+                        <input type="range" class="form-range" id="centerX" min="0" max="100" value="50">
+                        <output id="centerXVal">50%</output>
+                    </div>
+                    <div class="angle-row">
+                        <span class="pos-label">Y</span>
+                        <input type="range" class="form-range" id="centerY" min="0" max="100" value="50">
+                        <output id="centerYVal">50%</output>
                     </div>
                 </div>
 
@@ -66,15 +124,24 @@
                         Generated CSS
                         <i class="fa-solid fa-arrow-right-long copy-hint" title="Click code to copy"></i>
                     </span>
-                    <div class="copyCode" id="copyCodeText" onclick="myFunction()">
-                        <p>background-image: linear-gradient(to right, #f5af19, #f12711);</p>
+                    <div class="copyCode" id="codeCard">
+                        <textarea id="cssEditor" spellcheck="false" aria-label="Editable gradient CSS"></textarea>
+                    </div>
+                    <div class="toolbar">
+                        <button class="tool" id="copyBtn" onclick="myFunction()"><i class="fa-regular fa-copy"></i> Copy</button>
+                        <button class="tool" id="exportCssBtn"><i class="fa-solid fa-file-code"></i> Export CSS</button>
                     </div>
                 </div>
 
             </aside>
 
-            <!-- RIGHT: Colors panel -->
+            <!-- RIGHT: colors + AI -->
             <section class="panel colors-panel">
+
+                <div class="section">
+                    <span class="section-label">Style Gallery</span>
+                    <div class="gallery" id="gallery"></div>
+                </div>
 
                 <div class="section">
                     <span class="section-label">Colors</span>
@@ -84,29 +151,172 @@
                     </div>
                 </div>
 
-                <div class="section section-grow">
-                    <span class="section-label">Pickers</span>
-                    <div class="pickers">
-                        <div id="picker1"></div>
-                        <div id="picker2"></div>
+                <div class="section">
+                    <span class="section-label">Color Stops</span>
+                    <div id="stops"></div>
+                    <div class="toolbar">
+                        <button class="tool" id="addStop"><i class="fa-solid fa-plus"></i> Add stop</button>
+                        <button class="tool" id="addHardStop"><i class="fa-solid fa-scissors"></i> Add hard stop</button>
                     </div>
                 </div>
 
-            </section>
+                <div class="section">
+                    <span class="section-label">Actions</span>
+                    <div class="toolbar">
+                        <button class="tool" id="undoBtn" aria-label="Undo"><i class="fa-solid fa-rotate-left"></i></button>
+                        <button class="tool" id="redoBtn" aria-label="Redo"><i class="fa-solid fa-rotate-right"></i></button>
+                        <button class="tool" id="randBtn"><i class="fa-solid fa-shuffle"></i> Randomize</button>
+                        <button class="tool" id="favBtn" aria-label="Toggle favorite"><i class="fa-regular fa-heart"></i></button>
+                    </div>
+                </div>
 
+                <div class="section">
+                    <span class="section-label">Presets</span><div class="chips" id="presets"></div>
+                    <span class="section-label">Favorites <small style="opacity:.55;font-weight:400">(session only)</small></span><div class="chips" id="favs"></div>
+                    <div class="toolbar">
+                        <button class="tool" id="exportJsonBtn"><i class="fa-solid fa-download"></i> Export JSON</button>
+                        <button class="tool" id="importJsonBtn"><i class="fa-solid fa-upload"></i> Import</button>
+                        <input type="file" id="importFile" accept="application/json" hidden>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <span class="section-label">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> AI Studio
+                        <small style="opacity:.55;font-weight:400;margin-right:auto">(local)</small>
+                        
+                        <button type="button" class="info-icon-btn" id="openAiHelp" aria-label="AI Studio help">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </button>
+                    </span>
+                    <div class="ai-input">
+                        <input type="text" id="promptInput" placeholder="sunset, cyberpunk, ocean, lavender...">
+                        <button id="promptGo">Generate</button>
+                    </div>
+                    <div class="ai-actions">
+                        <button class="tool" id="harmonyBtn">Color Harmony</button>
+                        <button class="tool" id="remixBtn">Remix</button>
+                        <button class="tool" id="explainBtn">Explain CSS</button>
+                    </div>
+                    <div class="ai-output" id="aiOutput"></div>
+                </div>
+
+            </section>
         </div>
 
-        <footer class="site-footer">Designed &amp; Developed by Smit Salunkhe</footer>
-
+        <footer class="site-footer">
+            <p class="footer-credit">Designed &amp; Developed by <strong>Smit Salunkhe</strong></p>
+            <ul class="footer-links">
+                <li><a href="https://github.com/blaze-king" target="_blank" rel="noopener noreferrer" aria-label="GitHub: blaze-king"><i class="fa-brands fa-github"></i><span>blaze-king</span></a></li>
+                <li><a href="mailto:blaze@gmail.com" aria-label="Email blaze@gmail.com"><i class="fa-solid fa-envelope"></i><span>blaze@gmail.com</span></a></li>
+                <li><a href="https://www.netlify.com" target="_blank" rel="noopener noreferrer" aria-label="Hosted on Netlify"><i class="fa-brands fa-netlify"></i><span>Hosted on Netlify</span></a></li>
+            </ul>
+        </footer>
     </section>
 
-    <!-- Copy Notification -->
-    <div id="toast" class="toast-msg" role="status" aria-live="polite">
-        <i class="fa-solid fa-check"></i>
-        <span>Code copied to clipboard</span>
+    <!-- ================= 3D PREVIEW OVERLAY ================= -->
+    <div class="preview-overlay" id="previewOverlay" hidden>
+        <canvas id="previewCanvas"></canvas>
+        <div class="preview-chrome">
+            <div>
+                <strong>3D Preview</strong><span>Drag to orbit · current gradient</span>
+            </div>
+            <button id="closePreview" aria-label="Close 3D preview"><i class="fa-solid fa-xmark"></i></button>
+        </div>
     </div>
 
-        <!-- jQuery 3.7.1 CDN -->
+    <!-- ================= EXPORT MODAL ================= -->
+    <div class="modal-shell" id="exportModal" hidden>
+        <div class="modal-card">
+            <h3>Export Background</h3>
+            <div class="size-picker" id="sizePicker">
+                <button data-w="1080" data-h="1080">1080 × 1080</button>
+                <button data-w="1920" data-h="1080" class="active">1920 × 1080</button>
+                <button data-w="2560" data-h="1440">2560 × 1440</button>
+                <button data-w="1080" data-h="1920">1080 × 1920</button>
+            </div>
+            <div class="custom-size">
+                <input type="number" id="customW" value="1920" min="64" max="8192" aria-label="Width">
+                <span>×</span>
+                <input type="number" id="customH" value="1080" min="64" max="8192" aria-label="Height">
+            </div>
+            <div class="modal-actions">
+                <button class="primary" id="exportBgGo"><i class="fa-solid fa-download"></i> Download PNG</button>
+                <button id="export3DGo" disabled><i class="fa-solid fa-cube"></i> Export 3D Preview</button>
+                <button id="closeExport">Cancel</button>
+            </div>
+            <p class="hint">The exported image contains only the gradient — no panels, no UI. 3D export is available only while the 3D preview is open.</p>
+        </div>
+    </div>
+
+    <!-- ================= TOAST ================= -->
+    <div id="toast" class="toast-msg" role="status" aria-live="polite">
+        <i class="fa-solid fa-check"></i>
+        <span id="toastText">Ready</span>
+    </div>
+
+    <!-- ================= AI HELP MODAL ================= -->
+    <div class="modal-shell" id="aiHelpModal" hidden>
+        <div class="modal-card ai-help-card">
+            <button class="close-modal" id="closeAiHelp" aria-label="Close help"><i class="fa-solid fa-xmark"></i></button>
+            
+            <h3 style="margin-bottom: 0.5rem"><i class="fa-solid fa-wand-magic-sparkles" style="color:#f5af19"></i> AI Studio Reference</h3>
+            <p style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 1.5rem;">All features run locally in your browser. No API keys, no cost.</p>
+
+            <div class="help-section">
+                <h4>Prompt → Gradient Keywords</h4>
+                <p class="help-desc">Type any of these words to instantly generate a matching gradient:</p>
+                
+                <div class="help-category">
+                    <span class="category-title">Nature & Sky</span>
+                    <div class="tag-wrap">
+                        <span class="ai-tag">sunset</span><span class="ai-tag">sunrise</span><span class="ai-tag">ocean</span><span class="ai-tag">sea</span><span class="ai-tag">wave</span><span class="ai-tag">forest</span><span class="ai-tag">nature</span><span class="ai-tag">fire</span><span class="ai-tag">ice</span><span class="ai-tag">snow</span><span class="ai-tag">winter</span><span class="ai-tag">summer</span><span class="ai-tag">golden hour</span><span class="ai-tag">warm sky</span>
+                    </div>
+                </div>
+
+                <div class="help-category">
+                    <span class="category-title">Sci-Fi & Digital</span>
+                    <div class="tag-wrap">
+                        <span class="ai-tag">cyberpunk</span><span class="ai-tag">neon</span><span class="ai-tag">synthwave</span><span class="ai-tag">vaporwave</span><span class="ai-tag">tech</span><span class="ai-tag">futuristic</span><span class="ai-tag">galaxy</span><span class="ai-tag">space</span><span class="ai-tag">star</span><span class="ai-tag">universe</span>
+                    </div>
+                </div>
+
+                <div class="help-category">
+                    <span class="category-title">Mood & Aesthetic</span>
+                    <div class="tag-wrap">
+                        <span class="ai-tag">lavender</span><span class="ai-tag">purple</span><span class="ai-tag">dreamy</span><span class="ai-tag">violet</span><span class="ai-tag">luxury</span><span class="ai-tag">minimal</span><span class="ai-tag">clean</span><span class="ai-tag">pastel</span><span class="ai-tag">midnight</span><span class="ai-tag">dark</span><span class="ai-tag">night</span><span class="ai-tag">candy</span><span class="ai-tag">fresh</span><span class="ai-tag">mint</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <h4>Color Harmony</h4>
+                <p class="help-desc">Generates mathematically perfect palettes from your first color.</p>
+                <div class="tag-wrap">
+                    <span class="ai-tag code">complementary</span>
+                    <span class="ai-tag code">analogous</span>
+                    <span class="ai-tag code">triadic</span>
+                    <span class="ai-tag code">split</span>
+                    <span class="ai-tag code">tetradic</span>
+                    <span class="ai-tag code">monochromatic</span>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <h4>Remix</h4>
+                <p class="help-desc">Generates 4 hue / saturation / lightness variants of the current gradient and drops them into Favorites for one-click apply.</p>
+            </div>
+
+            <div class="help-section">
+                <h4>Explain CSS</h4>
+                <p class="help-desc">Describes type, angle, direction, every color stop, and any hard stops in plain English.</p>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- ================= SCRIPTS ================= -->
+    <!-- jQuery 3.7.1 CDN -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <!-- Popper.js 2.11.8 CDN -->
@@ -114,8 +324,16 @@
 
     <!-- Bootstrap 5.3.8 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
-    <!-- Custom JavaScript -->
+    <!-- classic scripts — must run before modules -->
+    <script src="gradient-paint.js"></script>
+    <script src="palette.js"></script>
     <script src="script.js"></script>
+
+    <!-- modules (deferred by nature) -->
+    <script type="module" src="landing-scene.js"></script>
+    <script type="module" src="preview-scene.js"></script>
 </body>
 </html>
+
