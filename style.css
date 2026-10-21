@@ -506,6 +506,11 @@ body {
     outline: none;
 }
 .footer-links i { font-size: 1rem; }
+.hosting-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+}
 @media (max-width: 520px) {
     .site-footer { padding: 1.1rem 1rem; border-radius: 18px; }
     .footer-credit { font-size: 1.05rem; }
